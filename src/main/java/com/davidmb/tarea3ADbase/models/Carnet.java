@@ -122,8 +122,8 @@ public class Carnet {
 
 	@Override
 	public String toString() {
-		return "Carnet [id=" + id + ", doExp=" + doExp + ", distance=" + distance + ", nVips=" + nVips
-				+ ", initialStop=" + initialStop + ", pilgrim=" + "]";
+		return "Carnet: " + id + ", Fecha de expedición: " + doExp + ", Distancia: " + distance + ", Número de VIPS: "
+				+ nVips + ", Parada inicial: " + initialStop;
 	}
 
    

@@ -97,7 +97,6 @@ public class Service {
 
 	@Override
 	public String toString() {
-		return "Service [id=" + id + ", serviceName=" + serviceName + ", price=" + price + ", stopIds=" + stopIds
-				+ ", contractedGroups=" + contractedGroups + "]";
+		return "Servicio: " + "\nNombre: " + serviceName + "\nPrecio: " + price;
 	}
 }

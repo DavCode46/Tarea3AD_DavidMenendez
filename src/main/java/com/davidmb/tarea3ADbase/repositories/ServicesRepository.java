@@ -58,19 +58,6 @@ public class ServicesRepository {
 		query.constrain(Service.class);
 		return query.execute();
 	}
-
-//	public boolean existsByName(String name) {
-//		ObjectContainer db = DB4oConnection.getInstance().getDb();
-//		try {
-//			Query query = db.query();
-//			query.constrain(Service.class);
-//			query.descend("serviceName").constrain(name);
-//			List<Service> result = query.execute();
-//			return !result.isEmpty();
-//		} finally {
-//			db.close();
-//		}
-//	}
 	
 	public Service findByName(String name) {
 	    ObjectContainer db = DB4oConnection.getInstance().getDb();

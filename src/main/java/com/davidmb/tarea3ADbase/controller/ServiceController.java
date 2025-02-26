@@ -155,6 +155,7 @@ public class ServiceController implements Initializable {
 			serviceBeingEdited.setServiceName(name);
 			serviceBeingEdited.setPrice(price);
 			serviceBeingEdited.setStopIds(stops);
+			
 			if (showConfirmAlert(serviceBeingEdited)) {
 				servicesService.update(serviceBeingEdited);
 				saveAlert(serviceBeingEdited);

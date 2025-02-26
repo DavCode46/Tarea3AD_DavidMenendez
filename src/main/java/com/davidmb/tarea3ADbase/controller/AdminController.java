@@ -1,14 +1,12 @@
 package com.davidmb.tarea3ADbase.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -28,6 +26,7 @@ import com.davidmb.tarea3ADbase.models.User;
 import com.davidmb.tarea3ADbase.services.PilgrimService;
 import com.davidmb.tarea3ADbase.services.StopService;
 import com.davidmb.tarea3ADbase.services.UserService;
+import com.davidmb.tarea3ADbase.utils.Alerts;
 import com.davidmb.tarea3ADbase.utils.HelpUtil;
 import com.davidmb.tarea3ADbase.utils.ManagePassword;
 import com.davidmb.tarea3ADbase.utils.ShowPDFInModal;
@@ -39,10 +38,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -54,8 +50,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -154,6 +148,9 @@ public class AdminController implements Initializable {
 	@Autowired
 	private PilgrimService pilgrimService;
 
+	@Autowired
+	Alerts alert;
+
 	private ObservableList<Stop> stopList = FXCollections.observableArrayList();
 	private ObservableList<String> regions = FXCollections.observableArrayList();
 
@@ -167,21 +164,10 @@ public class AdminController implements Initializable {
 		HelpUtil.showHelp();
 	}
 
-	/**
-	 * Logout and go to the login page
-	 */
+	
 	@FXML
-	private void logout(ActionEvent event) throws IOException {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Logout");
-		alert.setHeaderText("¿Estás seguro que quieres cerrar sesión?");
-		// Cambiar el ícono de la ventana
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/logout.png")));
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK) {
-			stageManager.switchScene(FxmlView.LOGIN);
-		}
+	private void logout() {
+		alert.logout();
 	}
 
 	@FXML
@@ -210,7 +196,8 @@ public class AdminController implements Initializable {
 			user.setEmail(getManagerEmail());
 			user.setPassword(password);
 			user.setRole("Parada");
-			if (showConfirmAlert(user, stop)) {
+			String confirmMessage = "Parada:\nNombre " + stop.getName() + "-Región: " + stop.getRegion() + "\nResponsable: " + stop.getManager();
+			if (alert.confirm("Confirmar datos", "Confirma los datos", confirmMessage)) {
 				User newUser = userService.save(user);
 				stop.setManager(newUser.getUsername());
 				stop.setUserId(newUser.getId());
@@ -219,19 +206,20 @@ public class AdminController implements Initializable {
 
 				if (!exists) {
 					Stop newStop = stopService.save(stop);
-
-					saveAlert(newStop);
+					String saveMessage = "Parada:\nNombre " + newStop.getName() + "-Región: " + newStop.getRegion() + "\nResponsable: " + newStop.getManager();
+					alert.save("Registro exitoso", "Parada registrada con éxito", saveMessage);
 
 					clearFields();
 					loadStopDetails();
 				} else {
-					showErrorAlert(new StringBuilder("La parada ya existe."));
+					alert.error("Error al registrar parada", "Error al registrar parada", new StringBuilder("La parada ya existe."));
 				}
 			} else {
-				saveAlert(null);
+				alert.info("Registro cancelado", "Registro cancelado", "Has cancelado el registro de la parada");
 			}
 		}
 	}
+	
 
 	@FXML
 	private void exportStopDataReport() throws JRException {
@@ -299,52 +287,6 @@ public class AdminController implements Initializable {
 		confirmManagerPassword.clear();
 		managerPasswordVisibleField.clear();
 		confirmManagerPasswordVisibleField.clear();
-	}
-
-	private void saveAlert(Stop stop) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		if (stop != null) {
-			alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/success.png")));
-			alert.setTitle("Parada registrada con éxito.");
-			alert.setHeaderText("Parada registrada con éxito.");
-			alert.setContentText(
-					"La parada " + stop.getName() + " " + stop.getRegion() + " ha sido creada \nEl responsable es \n"
-							+ getManagerEmail() + " con id " + +userService.find(stop.getUserId()).getId() + ".");
-		} else {
-			alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/info.png")));
-			alert.setTitle("Registro cancelado");
-			alert.setHeaderText("Registro cancelado");
-			alert.setContentText("Registro de la parada cancelado, vuelve a introducir los datos");
-		}
-		// Cambiar el ícono de la ventana
-
-		alert.showAndWait();
-	}
-
-	private void showErrorAlert(StringBuilder message) {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Error al registrar parada");
-		alert.setHeaderText("Error al registrar parada");
-		alert.setContentText(message.toString());
-		// Cambiar el ícono de la ventana
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/error.png")));
-		alert.showAndWait();
-	}
-
-	private boolean showConfirmAlert(User user, Stop stop) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Registrar parada");
-		alert.setHeaderText("¿Confirma los datos de la parada?");
-		alert.setContentText("Parada: " + stop.getName() + " " + stop.getRegion() + "\nResponsable: "
-				+ stop.getManager() + "\nEmail: " + user.getEmail());
-		// Cambiar el ícono de la ventana
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/confirm.png")));
-		alert.showAndWait();
-		return alert.getResult().getButtonData().isDefaultButton();
 	}
 
 	private boolean validateData() {
@@ -429,7 +371,7 @@ public class AdminController implements Initializable {
 		}
 
 		if (message.length() > 0) {
-			showErrorAlert(message);
+			alert.error("Error al registrar parada", "Error al registrar parada", message);
 		} else {
 			ret = true;
 		}

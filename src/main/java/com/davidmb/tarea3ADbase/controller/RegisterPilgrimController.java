@@ -24,14 +24,13 @@ import com.davidmb.tarea3ADbase.services.PilgrimService;
 import com.davidmb.tarea3ADbase.services.PilgrimStopsService;
 import com.davidmb.tarea3ADbase.services.StopService;
 import com.davidmb.tarea3ADbase.services.UserService;
+import com.davidmb.tarea3ADbase.utils.Alerts;
 import com.davidmb.tarea3ADbase.utils.HelpUtil;
 import com.davidmb.tarea3ADbase.utils.ManagePassword;
 import com.davidmb.tarea3ADbase.view.FxmlView;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -39,8 +38,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
+
 
 @Controller
 public class RegisterPilgrimController implements Initializable {
@@ -96,6 +94,9 @@ public class RegisterPilgrimController implements Initializable {
 
 	@Autowired
 	private StopService stopService;
+	
+	@Autowired
+	private Alerts alert;
 
 	@Autowired
 	private PilgrimStopsService pilgrimStopsService;
@@ -122,7 +123,8 @@ public class RegisterPilgrimController implements Initializable {
 
 			User user = new User(name, "Peregrino", email, password);
 			Pilgrim pilgrim = new Pilgrim(name, nationality, carnet, null);
-			if (confirmAlert(user, pilgrim)) {
+			String confirmMessage = "Peregrino:\nNombre " + pilgrim.getName() + "\nNacionalidad: " + pilgrim.getNationality() + "\nEmail: " + user.getEmail();
+			if (alert.confirm("Conrimar datos", "Confirma los datos", confirmMessage)) {
 				User newUser = userService.save(user);
 
 				pilgrim.setUserId(newUser.getId());
@@ -135,14 +137,16 @@ public class RegisterPilgrimController implements Initializable {
 				pilgrimService.save(pilgrim);
 				pilgrimStopsService.save(initialPilgrimStop);
 
-				showInfoAlert(user);
+				alert.info("Registro completado", "Registro completado",
+						"Sus datos son: \nUsuario: " + user.getEmail() + " registrado correctamente.");
 				clearFields();
 				stageManager.switchScene(FxmlView.LOGIN);
 			} else {
-				showInfoAlert(null);
+				alert.info("Registro cancelado", "Registro cancelado", "Registro cancelado");
 			}
 		}
 	}
+	
 	
 	@FXML
 	private void showHelp() {
@@ -204,49 +208,6 @@ public class RegisterPilgrimController implements Initializable {
 	private void loadStops() {
 		stopComboBox.getItems().clear();
 		stopService.findAll().forEach(stop -> stopComboBox.getItems().add(stop));
-	}
-
-	private void showInfoAlert(User user) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		if (user != null) {
-			alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/success.png")));
-			alert.setTitle("Registro completado");
-			alert.setHeaderText("Registro completado");
-			alert.setContentText("Sus datos son: \nUsuario: " + user.getEmail() + " registrado correctamente.");
-		} else {
-			alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/info.png")));
-			alert.setTitle("Registro cancelado");
-			alert.setHeaderText("Registro cancelado");
-			alert.setContentText("Registro cancelado");
-		}
-
-		alert.showAndWait();
-	}
-
-	private boolean confirmAlert(User user, Pilgrim pilgrim) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirma tus datos");
-		alert.setHeaderText("Confirma tus datos");
-		alert.setContentText("Sus datos son: \nUsuario: " + user.getEmail() + "\n" + "Peregrino: " + pilgrim.getName()
-				+ "\n" + "Nacionalidad: " + pilgrim.getNationality() + "\n" + "Parada: "
-				+ pilgrim.getCarnet().getInitialStop().getName() + "\n" + "¿Son correctos tus datos?");
-		// Cambiar el ícono de la ventana
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/confirm.png")));
-		alert.showAndWait();
-		return alert.getResult().getButtonData().isDefaultButton();
-	}
-
-	private void showErrorAlert(StringBuilder message) {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Error al registrar peregrino");
-		alert.setHeaderText("Error al registrar peregrino");
-		alert.setContentText(message.toString());
-		// Cambiar el ícono de la ventana
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/error.png")));
-		alert.showAndWait();
 	}
 
 	private boolean validateData() {
@@ -329,7 +290,7 @@ public class RegisterPilgrimController implements Initializable {
 		if (message.length() == 0) {
 			ret = true;
 		} else {
-			showErrorAlert(message);
+			alert.error("Error al registrar peregrino", "Error al registrar peregrino", message);
 		}
 
 		return ret;

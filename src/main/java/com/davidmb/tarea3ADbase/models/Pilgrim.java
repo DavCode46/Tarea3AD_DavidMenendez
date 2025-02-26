@@ -135,14 +135,7 @@ public class Pilgrim {
 
     @Override
     public String toString() {
-        return "Pilgrim{" +
-               "id=" + id +
-               ", name='" + name + '\'' +
-               ", nationality='" + nationality + '\'' +
-               ", userId=" + userId +
-               ", carnet=" + (carnet != null ? carnet.getId() : "null") +
-               ", stops=" + pilgrimStops.size() +
-               '}';
+        return "Peregrino: " + name + "\nNacionalidad: " + nationality + "\nCarnet: " + carnet;
     }
 
 }

@@ -91,6 +91,17 @@ public enum FxmlView {
             return"/fxml/SendHome.fxml";
         }
 	},
+	VIEWSENDHOMES {
+		@Override
+        public String getTitle() {
+            return getStringFromResourceBundle("sendhome.title");
+        }
+
+        @Override
+        public String getFxmlFile() {
+            return"/fxml/SendHomeTable.fxml";
+        }
+	},
 	REGISTER_PILGRIM {
 		@Override
 		public String getTitle() {

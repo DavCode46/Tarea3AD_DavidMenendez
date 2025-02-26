@@ -12,6 +12,7 @@ import com.davidmb.tarea3ADbase.auth.Session;
 import com.davidmb.tarea3ADbase.config.StageManager;
 import com.davidmb.tarea3ADbase.models.User;
 import com.davidmb.tarea3ADbase.services.UserService;
+import com.davidmb.tarea3ADbase.utils.Alerts;
 import com.davidmb.tarea3ADbase.utils.HelpUtil;
 import com.davidmb.tarea3ADbase.utils.ManagePassword;
 import com.davidmb.tarea3ADbase.view.FxmlView;
@@ -19,17 +20,15 @@ import com.davidmb.tarea3ADbase.view.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
+
 
 /**
 
@@ -74,6 +73,9 @@ public class LoginController implements Initializable {
 	
 	@Autowired
 	private Session session;
+	
+	@Autowired
+	Alerts alert;
 
 	@FXML
 	private void login(ActionEvent event) throws IOException {
@@ -87,7 +89,7 @@ public class LoginController implements Initializable {
 
 			User user = userService.findByEmail(getUsername());
 			session.setLoggedInUser(user);
-			showSuccessAlert(user);
+			alert.info("Sesión iniciada como: " + user.getEmail(), null, "¡Bienvenido: " + user.getEmail() + "!\n");
 			
 			switch(user.getRole().toUpperCase()) {
 				case "ADMIN" -> stageManager.switchScene(FxmlView.ADMIN);
@@ -98,7 +100,7 @@ public class LoginController implements Initializable {
 			clearFields();          
 
 		} else {
-			showErrorAlert();
+			alert.error("Error al iniciar sesión", "Usuario o contraseña incorrectos", new StringBuilder("Por favor, introduzca un usuario y contraseña válidos"));
 		}
 	}
 	
@@ -114,27 +116,6 @@ public class LoginController implements Initializable {
 	        }
 	    }
 	
-	private void showErrorAlert() {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Error al iniciar sesión");
-        alert.setHeaderText("Usuario o contraseña incorrectos");
-        alert.setContentText("Por favor, introduzca un usuario y contraseña válidos");
-        // Cambiar el ícono de la ventana
-	    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-	    alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/error.png")));
-        alert.showAndWait();
-	}
-	
-	private void showSuccessAlert(User user) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Sesión iniciada como: " + user.getEmail());
-		alert.setHeaderText(null);
-		alert.setContentText("¡Bienvenido: " + user.getEmail() + "!\n");
-		 // Cambiar el ícono de la ventana
-	    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-	    alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/success.png")));
-		alert.showAndWait();
-	}
 	
 	private void clearFields() {
 		username.clear();

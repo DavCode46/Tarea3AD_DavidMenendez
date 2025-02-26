@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +18,19 @@ import com.davidmb.tarea3ADbase.models.User;
 import com.davidmb.tarea3ADbase.services.PilgrimService;
 import com.davidmb.tarea3ADbase.services.StayService;
 import com.davidmb.tarea3ADbase.services.StopService;
+import com.davidmb.tarea3ADbase.utils.Alerts;
 import com.davidmb.tarea3ADbase.utils.ExportarCarnetXML;
 import com.davidmb.tarea3ADbase.utils.HelpUtil;
 import com.davidmb.tarea3ADbase.utils.ShowPDFInModal;
-import com.davidmb.tarea3ADbase.view.FxmlView;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -94,6 +89,9 @@ public class PilgrimController implements Initializable {
 
 	@Autowired
 	private Session session;
+	
+	@Autowired
+	private Alerts alert;
 
 	@Lazy
 	@Autowired
@@ -132,7 +130,7 @@ public class PilgrimController implements Initializable {
 			lnlnVips.setText("Nº VIPS: " + Integer.valueOf(pilgrim.getCarnet().getnVips()).toString());
 			lblInitialStop.setText("Parada Inicial: " + pilgrim.getCarnet().getInitialStop().getName());
 		} else {
-			showErrorAlert("Error", "El usuario no existe.");
+			alert.error("Error", "No se ha encontrado el peregrino", new StringBuilder("No se ha encontrado el peregrino"));
 		}
 	}
 
@@ -199,31 +197,7 @@ public class PilgrimController implements Initializable {
 
 	@FXML
 	private void logout(ActionEvent event) throws IOException {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Logout");
-		alert.setHeaderText("¿Estás seguro que quieres cerrar sesión?");
-		 // Cambiar el ícono de la ventana
-	    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-	    alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/logout.png")));
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK) {
-			stageManager.switchScene(FxmlView.LOGIN);
-		}
+		alert.logout();
 	}
 
-
-
-	/**
-	 * Alerta de error
-	 */
-	private void showErrorAlert(String title, String message) {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle(title);
-		alert.setHeaderText(null);
-		alert.setContentText(message);
-		 // Cambiar el ícono de la ventana
-	    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-	    alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/error.png")));
-		alert.showAndWait();
-	}
 }

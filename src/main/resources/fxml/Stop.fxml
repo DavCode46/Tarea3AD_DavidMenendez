@@ -26,7 +26,7 @@
 	xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="com.davidmb.tarea3ADbase.controller.StopController">
 
-	<top>
+	<left>
 		<HBox prefWidth="500.0" alignment="CENTER" spacing="20.0">
 
 			<VBox prefHeight="300.0" prefWidth="500.0" spacing="20.0"
@@ -116,7 +116,7 @@
 			</VBox>
 
 		</HBox>
-	</top>
+	</left>
 
 	<center>
 		<VBox alignment="CENTER_RIGHT" prefHeight="571.0"

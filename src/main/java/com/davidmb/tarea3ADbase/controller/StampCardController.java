@@ -164,7 +164,7 @@ public class StampCardController implements Initializable {
 	private Session session;
 
 	private User user;
-	
+
 	private boolean sendHomeDisponibility;
 	private boolean isCardStamped = false;
 
@@ -284,26 +284,24 @@ public class StampCardController implements Initializable {
 	}
 
 	@FXML
-	private void sendHome() {    
-	    List<Long> selectedServices = getSelectedServices();
-	    
-	    
-	    if (selectedServices.isEmpty() || selectedServices.size() < 2 || !selectedServices.contains(servicesService.findByName("Envío a casa").getId())){
-	        showErrorAlert(new StringBuilder("Debes seleccionar al menos un servicio adicional además del envío a casa."),
-	                new String("Error al enviar a casa"));
-	        return;
-	    }
+	private void sendHome() {
+		List<Long> selectedServices = getSelectedServices();
 
-	
-	    stampCard();
-	    
-	  
-	    if (isCardStamped) {
-	        stageManager.switchScene(FxmlView.SENDHOME);
-	    } else {
-	        showErrorAlert(new StringBuilder("Debes sellar el carnet del peregrino antes de hacer un envío a casa."),
-	                new String("Error al enviar a casa"));
-	    }
+		if (selectedServices.isEmpty()
+				|| !selectedServices.contains(servicesService.findByName("Envío a casa").getId())) {
+			showErrorAlert(new StringBuilder("Debes seleccionar el servicio envío a casa."),
+					new String("Error al enviar a casa"));
+			return;
+		}
+
+		stampCard();
+
+		if (isCardStamped) {
+			stageManager.switchScene(FxmlView.SENDHOME);
+		} else {
+			showErrorAlert(new StringBuilder("Debes sellar el carnet del peregrino antes de hacer un envío a casa."),
+					new String("Error al enviar a casa"));
+		}
 	}
 
 	private void clearFields() {
@@ -370,7 +368,6 @@ public class StampCardController implements Initializable {
 		boolean ret = false;
 		StringBuilder message = new StringBuilder();
 
-		// Validar peregrino
 		if (cbPilgrims.getValue() == null) {
 			message.append("Debes seleccionar un peregrino.\n");
 		}
@@ -387,7 +384,6 @@ public class StampCardController implements Initializable {
 		boolean ret = false;
 		StringBuilder message = new StringBuilder();
 
-		// Validar servicios
 		if (selectedServices.isEmpty()) {
 			message.append("Debes seleccionar al menos un servicio.\n");
 		}
@@ -405,14 +401,15 @@ public class StampCardController implements Initializable {
 		}
 		return ret;
 	}
-	
+
 	private void updateVisibility() {
 		vboxSelectedList.setVisible(cbStay.isSelected() && sendHomeDisponibility);
 		vboxSelectedList.setManaged(cbStay.isSelected() && sendHomeDisponibility);
 	}
-	
+
 	private void loadSendHomeDisponibility() {
-		sendHomeDisponibility = servicesService.checkDisponibility("Envío a casa", stopService.findByUserId(user.getId()).getId());
+		sendHomeDisponibility = servicesService.checkDisponibility("Envío a casa",
+				stopService.findByUserId(user.getId()).getId());
 		updateVisibility();
 	}
 
@@ -420,10 +417,10 @@ public class StampCardController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		user = session.getLoggedInUser();
 		loadSendHomeDisponibility();
-		
+
 		cbStay.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            updateVisibility();
-        });
+			updateVisibility();
+		});
 
 		helpBtn.setTooltip(new Tooltip("Pulsa F1 para mostrar el menú de ayuda"));
 		pilgrimsTable.setTooltip(new Tooltip("Tabla de peregrinos"));
@@ -432,8 +429,6 @@ public class StampCardController implements Initializable {
 		rbNo.setTooltip(new Tooltip("Estancia no VIP"));
 		reset.setTooltip(new Tooltip("Limpiar formulario"));
 		stampCard.setTooltip(new Tooltip("Sellar carnet"));
-
-		
 
 		stopId.setText("Parada: " + user.getUsername());
 
@@ -546,7 +541,9 @@ public class StampCardController implements Initializable {
 		return services;
 	}
 
-	/*
-	 * Validations
-	 */
+		@FXML
+		private void onViewSendHomes()
+			{
+				stageManager.switchScene(FxmlView.VIEWSENDHOMES);
+			}
 }

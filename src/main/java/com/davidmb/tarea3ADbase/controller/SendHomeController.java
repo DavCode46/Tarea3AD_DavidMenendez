@@ -4,22 +4,24 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import com.davidmb.tarea3ADbase.auth.Session;
+import com.davidmb.tarea3ADbase.config.StageManager;
 import com.davidmb.tarea3ADbase.models.Address;
 import com.davidmb.tarea3ADbase.models.SendHome;
 import com.davidmb.tarea3ADbase.models.Stop;
 import com.davidmb.tarea3ADbase.models.User;
 import com.davidmb.tarea3ADbase.services.SendHomeService;
 import com.davidmb.tarea3ADbase.services.StopService;
+import com.davidmb.tarea3ADbase.utils.Alerts;
+import com.davidmb.tarea3ADbase.view.FxmlView;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableCell;
@@ -29,7 +31,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
 @Controller
 public class SendHomeController implements Initializable {
@@ -95,10 +96,17 @@ public class SendHomeController implements Initializable {
 
 	@Autowired
 	private Session session;
+	
+	@Autowired
+	private Alerts alert;
 
 	private User user;
 
 	private Stop currentStop;
+	
+	@Lazy
+	@Autowired
+	private StageManager stageManager;
 
 	public void setPilgrimName(String pilgrimName) {
 		txtPilgrimName.setText(pilgrimName);
@@ -126,17 +134,21 @@ public class SendHomeController implements Initializable {
 			Address addressObject = new Address(address, location);
 
 			SendHome sendHome = new SendHome(weight, volume, urgent, addressObject, currentStop.getId());
-			if(confirmAlert(sendHome)) {
-				showSaveAlert(sendHome);
+			String message = "Datos del envío a casa:\n" + "\nPeso: " + sendHome.getWeight() + "\nMedidas: " + volume[0] + "x" + volume[1] + "x" + volume[2];  
+			if(alert.confirm("Confirmar envío a casa", "Datos del envío a casa", message)) {
+				alert.save("Envío a casa", "Datos del envío", message);
 				sendHomeService.save(sendHome);
 				reset();
+				stageManager.switchScene(FxmlView.STAMPCARD);
 			} else {
-				showInfoAlert();
+				alert.info("Envío cancelado", "Envío cancelado", "Has cancelado el envío");
 			}
 			
 			loadSendHomeData();
 		}
 	}
+	
+	
 
 	private void setColumnProperties() {
 		colAddress.setCellValueFactory(new PropertyValueFactory<>("addressStreet"));
@@ -206,7 +218,7 @@ public class SendHomeController implements Initializable {
 
 	   
 	    if (message.length() > 0) {
-	        showErrorAlert(message.toString());
+	    	alert.error("Error", "Error al procesar el envío", message);
 	        return false;
 	    }
 
@@ -232,51 +244,12 @@ public class SendHomeController implements Initializable {
 	        return null;
 	    }
 	}
-
-
-	private void showSaveAlert(SendHome sendHome) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/success.png")));
-		alert.setTitle("Envío registrado");
-		alert.setHeaderText("Envío registrado con éxito");
-		alert.setContentText("Su envío está en camino, recibirá un mensaje con el tracking");
-		alert.showAndWait();
-	}
 	
-	private void showInfoAlert() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/info.png")));
-		alert.setTitle("Información");
-		alert.setHeaderText("Información");
-		alert.setContentText("El envío ha sido cancelado");
-		alert.showAndWait();
+	@FXML
+	private void onReturn() {
+		stageManager.switchScene(FxmlView.STAMPCARD);
 	}
 
-	private boolean confirmAlert(SendHome sendHome) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirma tus datos");
-		alert.setHeaderText("Confirma tus datos");
-		alert.setContentText("¿Estás seguro de que quieres enviar el paquete con los siguientes datos?\n\n" + "Peso: "
-				+ sendHome.getWeight() + " kg\n" + "Dimensiones: " + sendHome.getVolume()[1] + "x"
-				+ sendHome.getVolume()[0] + "x" + sendHome.getVolume()[2] + " cm\n" + "Dirección: "
-				+ sendHome.getAddress().getStreet() + ", " + sendHome.getAddress().getLocality() + "\n" + "Urgente: "
-				+ (sendHome.isUrgent() ? "Sí" : "No") + "\n\n" + "Una vez enviado, no podrás modificar los datos.");
-
-		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		alertStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/confirm.png")));
-		alert.showAndWait();
-		return alert.getResult().getButtonData().isDefaultButton();
-	}
-
-	private void showErrorAlert(String message) {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Error");
-		alert.setHeaderText("Error al enviar el paquete");
-		alert.setContentText(message);
-		alert.showAndWait();
-	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

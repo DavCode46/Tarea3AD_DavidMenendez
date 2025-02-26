@@ -118,11 +118,9 @@ public class Stop implements Serializable {
 	    return Objects.hash(id);
 	}
 
-
-
 	@Override
 	public String toString() {
-		return name + " (" + region + ")";
+		return name + " - " + region + "\n";
 	}
 
 }

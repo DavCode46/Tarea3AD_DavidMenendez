@@ -91,8 +91,7 @@ public class ContractedGroup {
 
 	@Override
 	public String toString() {
-		return "ContractedGroup [id=" + id + ", totalPrice=" + totalPrice + ", payMode=" + payMode + ", extra=" + extra
-				+ ", stayId=" + stayId + ", serviceIds=" + serviceIds + "]";
+		return "Grupo contratado: " + ", precio total: " + totalPrice + ", modo de pago: " + payMode;
 	}
 
 }

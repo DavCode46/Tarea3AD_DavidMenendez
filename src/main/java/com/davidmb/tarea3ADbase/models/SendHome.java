@@ -123,8 +123,7 @@ public class SendHome extends Service implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SendHome [id=" + id + ", weight=" + weight + ", volume=" + Arrays.toString(volume) + ", urgent="
-				+ urgent + ", stopId=" + stopId + ", address=" + address + "]";
+		return "Envío a casa: " + "\nPeso: " + weight + "Medidas: " + volume[0] + "x" + volume[1] + "x" + volume[2] + "\nUrgente" + urgent;
 	}
 
 }

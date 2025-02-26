@@ -30,7 +30,6 @@
 
 	<left>
 		<VBox prefWidth="500.0" alignment="CENTER" spacing="20.0">
-
 			<!-- VBox sellar carnet -->
 			<VBox prefHeight="300.0" prefWidth="500.0" spacing="20.0"
 				alignment="CENTER" styleClass="background"
@@ -230,6 +229,7 @@
 						</graphic>
 					</Button>
 				</HBox>
+					<Button onAction="#onViewSendHomes"  styleClass="primary-button" text="Ver envíos" />
 				<Label text="Peregrinos" styleClass="form-title" />
 				<TableView fx:id="pilgrimsTable" prefHeight="300.0"
 					prefWidth="679.0" maxWidth="1100.0" tableMenuButtonVisible="true">
