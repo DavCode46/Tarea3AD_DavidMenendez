@@ -147,12 +147,15 @@ public class ServiceController implements Initializable {
 		if (!validateData(name, priceText)) {
 			return;
 		}
-
+		if(priceText.contains(",")) {
+			priceText = priceText.replace(",", ".");
+		}
 		double price = Double.parseDouble(priceText);
 		List<Long> stops = getSelectedStops();
 
 		if (serviceBeingEdited != null) {
 			serviceBeingEdited.setServiceName(name);
+			
 			serviceBeingEdited.setPrice(price);
 			serviceBeingEdited.setStopIds(stops);
 			
@@ -192,6 +195,8 @@ public class ServiceController implements Initializable {
 		servicePrice.clear();
 		stopsTable.getSelectionModel().clearSelection();
 		selectedStopsList.getItems().clear();
+		serviceBeingEdited = null;
+		saveService.setText("Guardar");
 	}
 
 	private void saveAlert(Service service) {
@@ -243,11 +248,21 @@ public class ServiceController implements Initializable {
 		if (name.isEmpty()) {
 			message.append("El nombre del servicio no puede estar vacío.\n");
 		}
+		if (selectedStops.isEmpty()) {
+			message.append("Debe seleccionar al menos una parada.\n");
+		}
 
 		if (priceText.isEmpty()) {
 			message.append("El precio no puede estar vacío.\n");
 		} else {
+			if(priceText.contains(",")) {
+				priceText = priceText.replace(",", ".");
+			}
 			try {
+				if (Double.parseDouble(priceText) < 0) {
+					message.append("El precio no puede ser negativo.\n");
+				}
+			
 				Double.parseDouble(priceText);
 			} catch (NumberFormatException e) {
 				message.append("El precio debe ser un número válido.\n");
@@ -323,7 +338,7 @@ public class ServiceController implements Initializable {
 							Service service = getTableView().getItems().get(getIndex());
 							updateService(service);
 						});
-
+					
 						btnEdit.setStyle("-fx-background-color: transparent;");
 						ImageView iv = new ImageView();
 						iv.setFitWidth(20);
@@ -338,20 +353,21 @@ public class ServiceController implements Initializable {
 						setAlignment(Pos.CENTER);
 						setText(null);
 					}
+				
 				}
 
 				private void updateService(Service service) {
-					serviceBeingEdited = service;
-					saveService.setText("Actualizar");
-					serviceName.setText(service.getServiceName());
-					servicePrice.setText(String.valueOf(service.getPrice()));
-					selectedStopsList.getItems().clear();
-					List<Stop> stops = new ArrayList<>();
-					for (Long id : service.getStopIds()) {
-						Stop stop = stopService.find(id);
-						stops.add(stop);
-					}
-					selectedStopsList.getItems().addAll(stops);
+				    serviceBeingEdited = service;
+				    saveService.setText("Actualizar");
+				    serviceName.setText(service.getServiceName());
+				    servicePrice.setText(String.valueOf(service.getPrice()));
+
+				    ObservableList<Stop> stops = FXCollections.observableArrayList();
+				    for (Long id : service.getStopIds()) {
+				        Stop stop = stopService.find(id);
+				        stops.add(stop);
+				    }
+				    selectedStopsList.setItems(stops); 
 				}
 			};
 			return cell;

@@ -60,7 +60,7 @@
 							</HBox.margin>
 						</Label>
 						
-						<Button fx:id="btnReturn" text="Ver envíos"
+						<Button fx:id="btnViewSends" text="Ver envíos"
 							styleClass="btnLogout" onAction="#onViewSendHomes">
 							<font>
 								<Font size="14.0" />

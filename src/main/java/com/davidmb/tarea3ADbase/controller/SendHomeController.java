@@ -119,8 +119,9 @@ public class SendHomeController implements Initializable {
 	@FXML
 	public void sendHome() {
 		if (validateData()) {
-
-			double weight = Double.parseDouble(txtWeight.getText());
+			String stringWeight = txtWeight.getText();
+			if(stringWeight.contains(",")) stringWeight = stringWeight.replace(",", ".");
+			double weight = Double.parseDouble(stringWeight);
 			String height = txtHeight.getText();
 			String width = txtWidth.getText();
 			String depth = txtDepth.getText();
@@ -132,7 +133,7 @@ public class SendHomeController implements Initializable {
 			volume[1] = Integer.parseInt(height);
 			volume[2] = Integer.parseInt(depth);
 			Address addressObject = new Address(address, location);
-
+			
 			SendHome sendHome = new SendHome(weight, volume, urgent, addressObject, currentStop.getId());
 			String message = "Datos del envío a casa:\n" + "\nPeso: " + sendHome.getWeight() + "\nMedidas: " + volume[0] + "x" + volume[1] + "x" + volume[2];  
 			if(alert.confirm("Confirmar envío a casa", "Datos del envío a casa", message)) {
@@ -195,6 +196,7 @@ public class SendHomeController implements Initializable {
 	    String depth = txtDepth.getText().trim();
 	    String address = txtAddress.getText().trim();
 	    String location = txtLocation.getText().trim();
+	    if(weight.contains(",")) weight = weight.replace(",", ".");
 
 	   
 	    if (weight.isEmpty()) message.append("El peso es obligatorio\n");

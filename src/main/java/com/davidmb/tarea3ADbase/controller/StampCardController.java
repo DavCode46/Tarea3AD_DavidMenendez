@@ -68,9 +68,15 @@ public class StampCardController implements Initializable {
 
 	@FXML
 	private Button btnReturn;
+	
+	@FXML
+	private Button btnSend;
 
 	@FXML
 	private Button helpBtn;
+	
+	@FXML
+	private Button btnViewSends;
 
 	@FXML
 	private Label stopId;
@@ -247,7 +253,7 @@ public class StampCardController implements Initializable {
 		contractedGroup.setId(contractedGroupService.getNextId());
 		contractedGroup.setServiceIds(getSelectedServices());
 		contractedGroup.setStayId(stay.getId());
-		contractedGroup.setTotalPrice(Double.parseDouble(totalPrice.getText().replace(" €", "")));
+		contractedGroup.setTotalPrice(Double.parseDouble(totalPrice.getText().replace(",", ".").split(" ")[0]));
 		contractedGroup.setPayMode(getSelectedPayMode());
 		contractedGroup.setExtra(extraTextField.getText());
 
@@ -332,8 +338,9 @@ public class StampCardController implements Initializable {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Contrato de grupo");
 		alert.setHeaderText("Contrato de grupo");
+		String totalFormatted = String.format("%.2f €", c.getTotalPrice());
 		alert.setContentText("El contrato de grupo ha sido registrado correctamente. \n" + "ID: " + c.getId() + "\n"
-				+ "Precio total: " + c.getTotalPrice() + " €\n" + "Modo de pago: " + c.getPayMode() + "\n"
+				+ "Precio total: " + totalFormatted + "\n" + "Modo de pago: " + c.getPayMode() + "\n"
 				+ "Observaciones: " + c.getExtra());
 		// Cambiar el ícono de la ventana
 		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -403,8 +410,12 @@ public class StampCardController implements Initializable {
 	}
 
 	private void updateVisibility() {
-		vboxSelectedList.setVisible(cbStay.isSelected() && sendHomeDisponibility);
-		vboxSelectedList.setManaged(cbStay.isSelected() && sendHomeDisponibility);
+		vboxSelectedList.setVisible(cbStay.isSelected());
+		vboxSelectedList.setManaged(cbStay.isSelected());
+		btnSend.setVisible(sendHomeDisponibility);
+		btnViewSends.setVisible(sendHomeDisponibility);
+		btnViewSends.setManaged(sendHomeDisponibility);
+		btnSend.setManaged(sendHomeDisponibility);
 	}
 
 	private void loadSendHomeDisponibility() {
@@ -537,7 +548,8 @@ public class StampCardController implements Initializable {
 			}
 		}
 		selectedServicesList.setItems(selectedServices);
-		totalPrice.setText(total + " €");
+		String totalString = String.format("%.2f €", total);
+		totalPrice.setText(totalString);
 		return services;
 	}
 
