@@ -39,10 +39,6 @@
 			styleClass="background" alignment="CENTER_LEFT">
 
 			<Label text="Enviar a casa" styleClass="form-title" />
-<!-- 			<TextField fx:id="txtPilgrimName" styleClass="text-field" -->
-<!-- 				promptText="Nombre Peregrino"  editable="false"/> -->
-<!-- 			<TextField fx:id="txtServices" styleClass="text-field" -->
-<!-- 				promptText="Servicios"  editable="false"/> -->
 			<TextField fx:id="txtWeight" styleClass="text-field"
 				promptText="Peso" />
 			<TextField fx:id="txtHeight" styleClass="text-field"

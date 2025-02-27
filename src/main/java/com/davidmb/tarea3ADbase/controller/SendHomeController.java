@@ -203,6 +203,7 @@ public class SendHomeController implements Initializable {
 	    if (depth.isEmpty()) message.append("El largo es obligatorio\n");
 	    if (address.isEmpty()) message.append("La dirección es obligatoria\n");
 	    if (location.isEmpty()) message.append("La ubicación es obligatoria\n");
+	    if(location.chars().allMatch(Character::isDigit)) message.append("La localidad no puede ser un número\n");
 
 	   
 	    Double peso = parseDouble(weight, "El peso debe ser un número válido", message);
@@ -260,6 +261,7 @@ public class SendHomeController implements Initializable {
 	}
 
 	private void loadSendHomeData() {
+		sendHomesData.clear();
 		sendsHomeTable.getItems().clear();
 		sendHomesData.addAll(sendHomeService.getAllByStopId(currentStop.getId()));
 		sendsHomeTable.setItems(sendHomesData);

@@ -59,6 +59,20 @@
 								<Insets left="70.0" />
 							</HBox.margin>
 						</Label>
+						
+						<Button fx:id="btnReturn" text="Ver envíos"
+							styleClass="btnLogout" onAction="#onViewSendHomes">
+							<font>
+								<Font size="14.0" />
+							</font>
+							<HBox.margin>
+								<Insets left="5.0" top="5.0" />
+							</HBox.margin>
+							<effect>
+								<DropShadow blurType="ONE_PASS_BOX" color="#00000091" />
+							</effect>
+						</Button>
+
 					</HBox>
 
 					<Label text="Sellar Carnet" styleClass="form-title">
@@ -93,7 +107,7 @@
 							</HBox>
 						</children>
 					</HBox>
-				
+
 				</children>
 			</VBox>
 
@@ -132,28 +146,28 @@
 					</HBox>
 					<VBox spacing="10.0" alignment="CENTER">
 
-					
+
 
 
 						<HBox alignment="CENTER" spacing="10.0">
 
-							<TextField fx:id="extraTextField" promptText="Extras" prefWidth="150" maxWidth="150" >
-							<HBox.margin>
-								 
-								 <Insets bottom="10.0" />
-								 
-								 </HBox.margin>
-								 </TextField>
-							
-							<Button fx:id="btnSend" text="Enviar"
-							styleClass="primary-button"
-								 prefWidth="150" maxWidth="150"
-								 onAction="#sendHome">
+							<TextField fx:id="extraTextField" promptText="Extras"
+								prefWidth="150" maxWidth="150">
 								<HBox.margin>
-								 
-								 <Insets bottom="10.0" />
-								 
-								 </HBox.margin>
+
+									<Insets bottom="10.0" />
+
+								</HBox.margin>
+							</TextField>
+
+							<Button fx:id="btnSend" text="Enviar"
+								styleClass="primary-button" prefWidth="150" maxWidth="150"
+								onAction="#sendHome">
+								<HBox.margin>
+
+									<Insets bottom="10.0" />
+
+								</HBox.margin>
 								<font>
 									<Font size="14.0" />
 								</font>
@@ -162,11 +176,11 @@
 										color="#00000091" />
 								</effect>
 							</Button>
- 								
+
 
 						</HBox>
-						
-							<HBox alignment="CENTER" spacing="10.0">
+
+						<HBox alignment="CENTER" spacing="10.0">
 
 							<RadioButton fx:id="rbCard" text="Tarjeta">
 								<toggleGroup>
@@ -189,22 +203,22 @@
 
 				</children>
 			</VBox>
-	<HBox spacing="10.0" alignment="CENTER">
-						<children>
-							<Button fx:id="reset" text="_Cancelar"
-								styleClass="white-button" onAction="#reset">
-								<HBox.margin>
-									<Insets top="10.0"  />
-								</HBox.margin>
-							</Button>
-							<Button fx:id="stampCard" text="_Sellar Carnet"
-								styleClass="primary-button" onAction="#stampCard">
-								<HBox.margin>
-									<Insets top="10.0" />
-								</HBox.margin>
-							</Button>
-						</children>
-					</HBox>
+			<HBox spacing="10.0" alignment="CENTER">
+				<children>
+					<Button fx:id="reset" text="_Cancelar"
+						styleClass="white-button" onAction="#reset">
+						<HBox.margin>
+							<Insets top="10.0" />
+						</HBox.margin>
+					</Button>
+					<Button fx:id="stampCard" text="_Sellar Carnet"
+						styleClass="primary-button" onAction="#stampCard">
+						<HBox.margin>
+							<Insets top="10.0" />
+						</HBox.margin>
+					</Button>
+				</children>
+			</HBox>
 		</VBox>
 	</left>
 
@@ -229,7 +243,7 @@
 						</graphic>
 					</Button>
 				</HBox>
-					<Button onAction="#onViewSendHomes"  styleClass="primary-button" text="Ver envíos" />
+
 				<Label text="Peregrinos" styleClass="form-title" />
 				<TableView fx:id="pilgrimsTable" prefHeight="300.0"
 					prefWidth="679.0" maxWidth="1100.0" tableMenuButtonVisible="true">
