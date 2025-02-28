@@ -66,16 +66,20 @@
 		<VBox alignment="CENTER_RIGHT" prefHeight="571.0"
 			prefWidth="692.0" maxWidth="1300.0" BorderPane.alignment="CENTER">
 			<children>
-			<Button styleClass="primary-button"
-					text="Volver" onAction="#onReturn" />
+				<Button styleClass="primary-button" text="Volver"
+					onAction="#onReturn">
+					<VBox.margin>
+						<Insets bottom="20.0" right="20.0" />
+					</VBox.margin>
+				</Button>
 				<TableView fx:id="sendsHomeTable" prefHeight="300.0"
 					prefWidth="679.0" maxWidth="1300.0" tableMenuButtonVisible="true">
 					<HBox.margin>
 						<Insets right="20.0" />
 					</HBox.margin>
 					<columns>
-<!-- 						<TableColumn fx:id="colPilgrimName" maxWidth="4000.0" -->
-<!-- 							prefWidth="75.0" text="Nombre Peregrino" /> -->
+						<!-- <TableColumn fx:id="colPilgrimName" maxWidth="4000.0" -->
+						<!-- prefWidth="75.0" text="Nombre Peregrino" /> -->
 						<TableColumn fx:id="colAddress" maxWidth="4000.0"
 							prefWidth="75.0" text="Dirección" />
 
@@ -86,8 +90,8 @@
 							prefWidth="75.0" text="Peso" />
 						<TableColumn fx:id="colVolum" maxWidth="4000.0"
 							prefWidth="75.0" text="Ancho - Alto - Profundidad" />
-							
-							<TableColumn fx:id="colUrgent" maxWidth="4000.0"
+
+						<TableColumn fx:id="colUrgent" maxWidth="4000.0"
 							prefWidth="75.0" text="Urgente" />
 
 					</columns>

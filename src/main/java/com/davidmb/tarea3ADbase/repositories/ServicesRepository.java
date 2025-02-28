@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.davidmb.tarea3ADbase.db.DB4oConnection;
 import com.davidmb.tarea3ADbase.models.Service;
+import com.davidmb.tarea3ADbase.utils.StringUtils;
 import com.db4o.ObjectContainer;
 import com.db4o.query.Query;
 
@@ -64,13 +65,20 @@ public class ServicesRepository {
 	    try {
 	        Query query = db.query();
 	        query.constrain(Service.class);
-	        query.descend("serviceName").constrain(name);
-	        List<Service> result = query.execute();
-	        return result.isEmpty() ? null : result.get(0); 
+	        List<Service> result = query.execute(); 
+	        
+	        for (Service service : result) {
+	            if (StringUtils.normalize(service.getServiceName()).equals(StringUtils.normalize(name))) {
+	                return service;
+	            }
+	        }
+	        return null; 
 	    } finally {
 	        db.close();
 	    }
 	}
+
+
 
 	
 	public boolean checkDisponibility(String serviceName, Long stopId) {
