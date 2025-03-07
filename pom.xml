@@ -35,7 +35,6 @@
 	</repositories>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>com.objectdb</groupId>
 			<artifactId>objectdb-jk</artifactId>
@@ -142,6 +141,26 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>23</version>
 		</dependency>
+
+		<dependency>
+			<groupId>net.sf.xmldb-org</groupId>
+			<artifactId>xmldb-api</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.exist-db</groupId>
+			<artifactId>exist-core</artifactId>
+			<version>6.3.0</version>
+			<!-- aquí añades la exclusión -->
+			<exclusions>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 	</dependencies>
 
 	<build>
