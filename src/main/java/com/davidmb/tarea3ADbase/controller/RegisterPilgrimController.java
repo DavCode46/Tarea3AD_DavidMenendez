@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -15,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import com.davidmb.tarea3ADbase.config.StageManager;
+import com.davidmb.tarea3ADbase.db.ExistDBConnection;
 import com.davidmb.tarea3ADbase.models.Carnet;
 import com.davidmb.tarea3ADbase.models.Pilgrim;
 import com.davidmb.tarea3ADbase.models.PilgrimStops;
@@ -25,6 +27,7 @@ import com.davidmb.tarea3ADbase.services.PilgrimStopsService;
 import com.davidmb.tarea3ADbase.services.StopService;
 import com.davidmb.tarea3ADbase.services.UserService;
 import com.davidmb.tarea3ADbase.utils.Alerts;
+import com.davidmb.tarea3ADbase.utils.ExportarCarnetXML;
 import com.davidmb.tarea3ADbase.utils.HelpUtil;
 import com.davidmb.tarea3ADbase.utils.ManagePassword;
 import com.davidmb.tarea3ADbase.view.FxmlView;
@@ -97,9 +100,15 @@ public class RegisterPilgrimController implements Initializable {
 	
 	@Autowired
 	private Alerts alert;
+	
+	@Autowired
+	private ExportarCarnetXML exportarCarnet;
 
 	@Autowired
 	private PilgrimStopsService pilgrimStopsService;
+	
+	@Autowired 
+	private ExistDBConnection existDBConnection;
 
 	@FXML
 	private void registerPilgrim() {
@@ -140,6 +149,14 @@ public class RegisterPilgrimController implements Initializable {
 				alert.info("Registro completado", "Registro completado",
 						"Sus datos son: \nUsuario: " + user.getEmail() + " registrado correctamente.");
 				clearFields();
+				try {
+					exportarCarnet.exportarCarnet(pilgrim);
+					File carnetFile = new File("exports/pilgrims/carnet_" + pilgrim.getName() + ".xml");
+					ExistDBConnection.getInstance().storeCarnet(currentStop.getName(), carnetFile);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				stageManager.switchScene(FxmlView.LOGIN);
 			} else {
 				alert.info("Registro cancelado", "Registro cancelado", "Registro cancelado");

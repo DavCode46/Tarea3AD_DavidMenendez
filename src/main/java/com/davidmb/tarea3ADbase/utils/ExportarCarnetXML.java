@@ -159,7 +159,7 @@ public class ExportarCarnetXML {
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		DOMSource source = new DOMSource(doc);
 
-		StreamResult result = new StreamResult(new File("exports/pilgrims/" + pilgrim.getName() + ".xml"));
+		StreamResult result = new StreamResult(new File("exports/pilgrims/carnet_" + pilgrim.getName() + ".xml"));
 		transformer.transform(source, result);
 
 		Alert alert = new Alert(AlertType.INFORMATION);

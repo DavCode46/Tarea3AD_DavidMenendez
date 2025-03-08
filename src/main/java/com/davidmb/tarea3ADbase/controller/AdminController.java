@@ -20,6 +20,7 @@ import org.w3c.dom.NodeList;
 
 import com.davidmb.tarea3ADbase.auth.Session;
 import com.davidmb.tarea3ADbase.config.StageManager;
+import com.davidmb.tarea3ADbase.db.ExistDBConnection;
 import com.davidmb.tarea3ADbase.dtos.StayView;
 import com.davidmb.tarea3ADbase.models.Stop;
 import com.davidmb.tarea3ADbase.models.User;
@@ -206,6 +207,7 @@ public class AdminController implements Initializable {
 
 				if (!exists) {
 					Stop newStop = stopService.save(stop);
+					ExistDBConnection.getInstance().createStopCollection(newStop.getName());
 					String saveMessage = "Parada:\nNombre " + newStop.getName() + "-Región: " + newStop.getRegion() + "\nResponsable: " + newStop.getManager();
 					alert.save("Registro exitoso", "Parada registrada con éxito", saveMessage);
 
