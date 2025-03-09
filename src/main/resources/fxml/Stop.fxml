@@ -20,7 +20,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0"
+<BorderPane prefHeight="600.0" prefWidth="1200.0"
 	stylesheets="@../styles/Admin.css"
 	xmlns="http://javafx.com/javafx/8.0.111"
 	xmlns:fx="http://javafx.com/fxml/1"
@@ -120,7 +120,7 @@
 
 	<center>
 		<VBox alignment="CENTER_RIGHT" prefHeight="571.0"
-			prefWidth="692.0" maxWidth="1100.0" BorderPane.alignment="CENTER">
+			prefWidth="1300.0" maxWidth="1500.0" BorderPane.alignment="CENTER">
 			<children>
 				<TableView fx:id="pilgrimsTable" prefHeight="300.0"
 					prefWidth="679.0" maxWidth="1100.0" tableMenuButtonVisible="true">
@@ -142,6 +142,38 @@
 							prefWidth="75.0" text="Fecha estancia" />
 						<TableColumn fx:id="colVip" maxWidth="4000.0"
 							prefWidth="60.0" text="VIP" />
+					</columns>
+					<VBox.margin>
+						<Insets left="10.0" right="5.0" />
+					</VBox.margin>
+					<columnResizePolicy>
+						<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+					</columnResizePolicy>
+				</TableView>
+				
+				<TableView fx:id="carnetsTable" prefHeight="300.0"
+					prefWidth="1000.0" maxWidth="1100.0" tableMenuButtonVisible="true">
+					<HBox.margin>
+						<Insets right="20.0" />
+					</HBox.margin>
+					<columns>
+					<TableColumn fx:id="colCarnetId" maxWidth="4000.0"
+							prefWidth="75.0" text="ID" />
+						<TableColumn fx:id="colCarnetPilgrim" maxWidth="4000.0"
+							prefWidth="75.0" text="Nombre" />
+								<TableColumn fx:id="colCarnetNationality" maxWidth="4000.0"
+							prefWidth="75.0" text="Nacionalidad" />
+							
+						<TableColumn fx:id="colCarnetDate"
+							maxWidth="4000.0" prefWidth="75.0" text="Expedido" />
+							
+							<TableColumn fx:id="colCarnetToday"
+							maxWidth="4000.0" prefWidth="75.0" text="Hoy" />
+					
+						<TableColumn fx:id="colCarnetStop" maxWidth="4000.0"
+							prefWidth="75.0" text="Expedido en" />
+						<TableColumn fx:id="colCarnetDistance" maxWidth="4000.0"
+							prefWidth="75.0" text="Distancia" />
 					</columns>
 					<VBox.margin>
 						<Insets left="10.0" right="5.0" />

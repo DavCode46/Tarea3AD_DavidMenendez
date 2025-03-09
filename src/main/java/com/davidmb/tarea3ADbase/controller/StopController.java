@@ -13,7 +13,10 @@ import org.springframework.stereotype.Controller;
 
 import com.davidmb.tarea3ADbase.auth.Session;
 import com.davidmb.tarea3ADbase.config.StageManager;
+import com.davidmb.tarea3ADbase.db.ExistDBConnection;
+import com.davidmb.tarea3ADbase.dtos.CarnetDTO;
 import com.davidmb.tarea3ADbase.dtos.StayView;
+import com.davidmb.tarea3ADbase.models.Stop;
 import com.davidmb.tarea3ADbase.models.User;
 import com.davidmb.tarea3ADbase.services.PilgrimService;
 import com.davidmb.tarea3ADbase.services.StopService;
@@ -90,6 +93,30 @@ public class StopController implements Initializable {
 
 	@FXML
 	private TableColumn<StayView, Boolean> colVip;
+	
+	@FXML
+	private TableView<CarnetDTO> carnetsTable;
+	
+	@FXML
+	private TableColumn<CarnetDTO, Long> colCarnetId;
+	
+	@FXML
+	private TableColumn<CarnetDTO, LocalDate> colCarnetDate;
+	
+	@FXML
+	private TableColumn<CarnetDTO, String> colCarnetStop;
+	
+	@FXML
+	private TableColumn<CarnetDTO, String> colCarnetPilgrim;
+	
+	@FXML
+	private TableColumn<CarnetDTO, LocalDate> colCarnetToday;
+	
+	@FXML
+	private TableColumn<CarnetDTO, Double> colCarnetDistance;
+	
+	@FXML
+	private TableColumn<CarnetDTO, String> colCarnetNationality;
 
 	@Lazy
 	@Autowired
@@ -200,6 +227,7 @@ public class StopController implements Initializable {
 		setColumnProperties();
 
 		loadStayViews();
+		loadCarnets();
 	}
 
 	/*
@@ -251,6 +279,15 @@ public class StopController implements Initializable {
 				}
 			}
 		});
+		
+		// Carnet columns
+		colCarnetId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colCarnetDate.setCellValueFactory(new PropertyValueFactory<>("dateExpedition"));
+		colCarnetStop.setCellValueFactory(new PropertyValueFactory<>("issuedIn"));
+		colCarnetPilgrim.setCellValueFactory(new PropertyValueFactory<>("pilgrimName"));
+		colCarnetToday.setCellValueFactory(new PropertyValueFactory<>("today"));
+		colCarnetDistance.setCellValueFactory(new PropertyValueFactory<>("totalDistance"));
+		colCarnetNationality.setCellValueFactory(new PropertyValueFactory<>("pilgrimNationality"));
 
 	}
 
@@ -264,6 +301,14 @@ public class StopController implements Initializable {
 				.findAllStayViewsByStop(stopService.findByUserId(user.getId()).getId());
 		stayViews.addAll(stayViewList);	
 		pilgrimsTable.setItems(stayViews);
+	}
+	
+	private void loadCarnets() {
+		ObservableList<CarnetDTO> carnets = FXCollections.observableArrayList();
+		Stop stop = stopService.findByUserId(user.getId());
+		List<CarnetDTO> carnetList = ExistDBConnection.getInstance().getCarnetsDTOByStop(stop.getName());
+		carnets.addAll(carnetList);
+		carnetsTable.setItems(carnets);
 	}
 
 }

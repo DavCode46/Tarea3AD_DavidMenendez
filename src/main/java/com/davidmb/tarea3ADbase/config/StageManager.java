@@ -42,7 +42,7 @@ public class StageManager {
       //  primaryStage.sizeToScene();
         primaryStage.centerOnScreen();
       //  primaryStage.setMaximized(true);
-        primaryStage.setWidth(1000);
+        primaryStage.setWidth(1300);
         primaryStage.setHeight(Screen.getPrimary().getVisualBounds().getHeight());
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/pilgrim.png")));
         try {

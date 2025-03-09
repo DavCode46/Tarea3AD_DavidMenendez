@@ -1,9 +1,10 @@
 package com.davidmb.tarea3ADbase.db;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.springframework.stereotype.Component;
@@ -13,6 +14,9 @@ import org.xmldb.api.base.Database;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
+
+import com.davidmb.tarea3ADbase.dtos.CarnetDTO;
+import com.davidmb.tarea3ADbase.utils.ParserXMLToCarnet;
 
 @Component
 public class ExistDBConnection {
@@ -118,25 +122,34 @@ public class ExistDBConnection {
     }
 
     
-    public void listCarnetsByStop(String stopName) {
+    public List<CarnetDTO> getCarnetsDTOByStop(String stopName) {
+        List<CarnetDTO> carnetList = new ArrayList<>();
         try {
             String stopCollectionPath = URI + "/tarea5_ad/" + stopName;
             Collection stopCollection = DatabaseManager.getCollection(stopCollectionPath, USER, PASSWORD);
-
             if (stopCollection == null) {
                 System.out.println("No existe la colección para la parada: " + stopName);
-                return;
+                return carnetList;
             }
-
             String[] resources = stopCollection.listResources();
             System.out.println("Carnets almacenados en la parada " + stopName + ":");
-            for (String resource : resources) {
-                System.out.println(resource);
+            for (String resourceName : resources) {
+                System.out.println(resourceName);
+                XMLResource resource = (XMLResource) stopCollection.getResource(resourceName);
+                if (resource != null) {           
+                    String content = (String) resource.getContent();                
+                    CarnetDTO dto = ParserXMLToCarnet.parse(content);
+                    if (dto != null) {
+                        carnetList.add(dto);
+                    }
+                }
             }
         } catch (XMLDBException e) {
             e.printStackTrace();
         }
+        return carnetList;
     }
+
 
     
     public void close() {

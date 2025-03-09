@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<carnet>
+   <id>4</id>
+   <fechaexp>2025-03-09</fechaexp>
+   <expedidoen>Siero</expedidoen>
+   <peregrino>
+      <nombre>f</nombre>
+      <nacionalidad>Austria</nacionalidad>
+   </peregrino>
+   <hoy>2025-03-09</hoy>
+   <distanciatotal>0,0</distanciatotal>
+   <paradas>
+      <parada>
+         <orden>1</orden>
+         <nombre>Siero</nombre>
+         <region>Esp</region>
+      </parada>
+   </paradas>
+   <estancias/>
+</carnet>
