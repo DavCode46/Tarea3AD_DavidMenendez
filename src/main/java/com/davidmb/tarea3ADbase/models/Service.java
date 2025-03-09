@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.MappedSuperclass;
+
 
 
 public class Service {
@@ -97,6 +96,6 @@ public class Service {
 
 	@Override
 	public String toString() {
-		return "Servicio: " + "\nNombre: " + serviceName + "\nPrecio: " + price;
+		return "Servicio: " + "Nombre: " + serviceName + " - Precio: " + price;
 	}
 }

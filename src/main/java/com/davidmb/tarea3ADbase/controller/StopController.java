@@ -13,11 +13,11 @@ import org.springframework.stereotype.Controller;
 
 import com.davidmb.tarea3ADbase.auth.Session;
 import com.davidmb.tarea3ADbase.config.StageManager;
-import com.davidmb.tarea3ADbase.db.ExistDBConnection;
 import com.davidmb.tarea3ADbase.dtos.CarnetDTO;
 import com.davidmb.tarea3ADbase.dtos.StayView;
 import com.davidmb.tarea3ADbase.models.Stop;
 import com.davidmb.tarea3ADbase.models.User;
+import com.davidmb.tarea3ADbase.services.ExistDBService;
 import com.davidmb.tarea3ADbase.services.PilgrimService;
 import com.davidmb.tarea3ADbase.services.StopService;
 import com.davidmb.tarea3ADbase.utils.HelpUtil;
@@ -127,6 +127,9 @@ public class StopController implements Initializable {
 
 	@Autowired
 	private StopService stopService;
+	
+	@Autowired
+	private ExistDBService existDBService;
 
 
 	@Autowired
@@ -306,7 +309,7 @@ public class StopController implements Initializable {
 	private void loadCarnets() {
 		ObservableList<CarnetDTO> carnets = FXCollections.observableArrayList();
 		Stop stop = stopService.findByUserId(user.getId());
-		List<CarnetDTO> carnetList = ExistDBConnection.getInstance().getCarnetsDTOByStop(stop.getName());
+		List<CarnetDTO> carnetList = existDBService.getCarnetsDTOByStop(stop.getName());
 		carnets.addAll(carnetList);
 		carnetsTable.setItems(carnets);
 	}

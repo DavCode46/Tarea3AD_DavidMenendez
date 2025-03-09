@@ -1,10 +1,8 @@
 package com.davidmb.tarea3ADbase.db;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.springframework.stereotype.Component;
@@ -13,152 +11,107 @@ import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
-import org.xmldb.api.modules.XMLResource;
 
-import com.davidmb.tarea3ADbase.dtos.CarnetDTO;
-import com.davidmb.tarea3ADbase.utils.ParserXMLToCarnet;
 
 @Component
 public class ExistDBConnection {
-    private static final String URI;
-    private static final String DRIVER = "org.exist.xmldb.DatabaseImpl";
-    private static final String USER;
-    private static final String PASSWORD;
-    private Collection collection = null;
-    private static ExistDBConnection instance;
+	private static final String URI;
+	private static final String DRIVER = "org.exist.xmldb.DatabaseImpl";
+	private static final String USER;
+	private static final String PASSWORD;
+	private Collection collection = null;
+	private static ExistDBConnection instance;
 
-    static {
-        try (InputStream input = ExistDBConnection.class.getClassLoader().getResourceAsStream("existdb.properties")) {
-            if (input == null) {
-                throw new IOException("Archivo de propiedades no encontrado: existdb.properties");
-            }
-            Properties properties = new Properties();
-            properties.load(input);
-            URI = properties.getProperty("existdb.uri"); 
-            USER = properties.getProperty("existdb.user");
-            PASSWORD = properties.getProperty("existdb.password");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al cargar la configuración de ExistDB");
-        }
-    }
+	static {
+		try (InputStream input = ExistDBConnection.class.getClassLoader().getResourceAsStream("existdb.properties")) {
+			if (input == null) {
+				throw new IOException("Archivo de propiedades no encontrado: existdb.properties");
+			}
+			Properties properties = new Properties();
+			properties.load(input);
+			URI = properties.getProperty("existdb.uri");
+			USER = properties.getProperty("existdb.user");
+			PASSWORD = properties.getProperty("existdb.password");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error al cargar la configuración de ExistDB");
+		}
+	}
 
-    private ExistDBConnection() {
-        try {
-            Class<?> cl = Class.forName(DRIVER);
-            Database database = (Database) cl.getDeclaredConstructor().newInstance();
-            DatabaseManager.registerDatabase(database);
+	private ExistDBConnection() {
+		try {
+			Class<?> cl = Class.forName(DRIVER);
+			Database database = (Database) cl.getDeclaredConstructor().newInstance();
+			DatabaseManager.registerDatabase(database);
 
-          
-            createCollection("/tarea5_ad");
-         
-            collection = DatabaseManager.getCollection(URI + "/tarea5_ad", USER, PASSWORD);
-            if (collection == null) {
-                throw new XMLDBException(0, "No se pudo acceder a la colección principal /tarea5_ad");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			createCollection("/tarea5_ad");
 
-    public static synchronized ExistDBConnection getInstance() {
-        if (instance == null) {
-            instance = new ExistDBConnection();
-        }
-        return instance;
-    }
+			collection = DatabaseManager.getCollection(URI + "/tarea5_ad", USER, PASSWORD);
+			if (collection == null) {
+				throw new XMLDBException(0, "No se pudo acceder a la colección principal /tarea5_ad");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void createCollection(String collectionPath) {
-        try {
-            String fullPath = URI + collectionPath;
-            Collection parent = DatabaseManager.getCollection(URI, USER, PASSWORD);
+	public static synchronized ExistDBConnection getInstance() {
+		if (instance == null) {
+			instance = new ExistDBConnection();
+		}
+		return instance;
+	}
 
-            if (parent != null) {
-                CollectionManagementService mgtService = (CollectionManagementService)
-                        parent.getService("CollectionManagementService", "1.0");
-                Collection coll = DatabaseManager.getCollection(fullPath, USER, PASSWORD);
+	public void createCollection(String collectionPath) {
+		try {
+			String fullPath = URI + collectionPath;
+			Collection parent = DatabaseManager.getCollection(URI, USER, PASSWORD);
 
-                if (coll == null) {
-                 
-                    String relativePath = collectionPath.startsWith("/") ? collectionPath.substring(1) : collectionPath;
-                    mgtService.createCollection(relativePath);
-                    System.out.println("Colección creada: " + collectionPath);
-                } else {
-                    System.out.println("La colección ya existe: " + collectionPath);
-                }
-            } else {
-                System.out.println("No se pudo acceder a la colección raíz 'db'.");
-            }
-        } catch (XMLDBException e) {
-            e.printStackTrace();
-        }
-    }
+			if (parent != null) {
+				CollectionManagementService mgtService = (CollectionManagementService) parent
+						.getService("CollectionManagementService", "1.0");
+				Collection coll = DatabaseManager.getCollection(fullPath, USER, PASSWORD);
 
-   
-    public void createStopCollection(String stopName) {
-        createCollection("/tarea5_ad/" + stopName);
-    }
+				if (coll == null) {
 
+					String relativePath = collectionPath.startsWith("/") ? collectionPath.substring(1) : collectionPath;
+					mgtService.createCollection(relativePath);
+					System.out.println("Colección creada: " + collectionPath);
+				} else {
+					System.out.println("La colección ya existe: " + collectionPath);
+				}
+			} else {
+				System.out.println("No se pudo acceder a la colección raíz 'db'.");
+			}
+		} catch (XMLDBException e) {
+			e.printStackTrace();
+		}
+	}
 
- 
-    public void storeCarnet(String stopName, File carnetFile) {
-        try {
-            String stopCollectionPath = URI + "/tarea5_ad/" + stopName;
-            Collection stopCollection = DatabaseManager.getCollection(stopCollectionPath, USER, PASSWORD);
+	public void createStopCollection(String stopName) {
+		String formattedStopName = stopName.replaceAll(" ", "_");
+		createCollection("/tarea5_ad/" + formattedStopName);
+	}
 
-            if (stopCollection == null) {
-                createStopCollection(stopName);
-                stopCollection = DatabaseManager.getCollection(stopCollectionPath, USER, PASSWORD);
-            }
+	public String getURI() {
+		return URI;
+	}
 
-            XMLResource resource = (XMLResource) stopCollection.createResource(carnetFile.getName(), "XMLResource");
-            resource.setContent(carnetFile);
-            stopCollection.storeResource(resource);
+	public String getUSER() {
+		return USER;
+	}
+	
+	public String getPASSWORD() {
+		return PASSWORD;
+	}
 
-            System.out.println("Carnet almacenado en ExistDB para la parada " + stopName + ": " + carnetFile.getName());
-        } catch (XMLDBException e) {
-            e.printStackTrace();
-        }
-    }
-
-    
-    public List<CarnetDTO> getCarnetsDTOByStop(String stopName) {
-        List<CarnetDTO> carnetList = new ArrayList<>();
-        try {
-            String stopCollectionPath = URI + "/tarea5_ad/" + stopName;
-            Collection stopCollection = DatabaseManager.getCollection(stopCollectionPath, USER, PASSWORD);
-            if (stopCollection == null) {
-                System.out.println("No existe la colección para la parada: " + stopName);
-                return carnetList;
-            }
-            String[] resources = stopCollection.listResources();
-            System.out.println("Carnets almacenados en la parada " + stopName + ":");
-            for (String resourceName : resources) {
-                System.out.println(resourceName);
-                XMLResource resource = (XMLResource) stopCollection.getResource(resourceName);
-                if (resource != null) {           
-                    String content = (String) resource.getContent();                
-                    CarnetDTO dto = ParserXMLToCarnet.parse(content);
-                    if (dto != null) {
-                        carnetList.add(dto);
-                    }
-                }
-            }
-        } catch (XMLDBException e) {
-            e.printStackTrace();
-        }
-        return carnetList;
-    }
-
-
-    
-    public void close() {
-        try {
-            if (collection != null) {
-                collection.close();
-            }
-        } catch (XMLDBException e) {
-            e.printStackTrace();
-        }
-    }
+	public void close() {
+		try {
+			if (collection != null) {
+				collection.close();
+			}
+		} catch (XMLDBException e) {
+			e.printStackTrace();
+		}
+	}
 }

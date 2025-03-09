@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -16,12 +15,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import com.davidmb.tarea3ADbase.config.StageManager;
-import com.davidmb.tarea3ADbase.db.ExistDBConnection;
 import com.davidmb.tarea3ADbase.models.Carnet;
 import com.davidmb.tarea3ADbase.models.Pilgrim;
 import com.davidmb.tarea3ADbase.models.PilgrimStops;
 import com.davidmb.tarea3ADbase.models.Stop;
 import com.davidmb.tarea3ADbase.models.User;
+import com.davidmb.tarea3ADbase.services.ExistDBService;
 import com.davidmb.tarea3ADbase.services.PilgrimService;
 import com.davidmb.tarea3ADbase.services.PilgrimStopsService;
 import com.davidmb.tarea3ADbase.services.StopService;
@@ -108,7 +107,7 @@ public class RegisterPilgrimController implements Initializable {
 	private PilgrimStopsService pilgrimStopsService;
 	
 	@Autowired 
-	private ExistDBConnection existDBConnection;
+	private ExistDBService existDBService;
 
 	@FXML
 	private void registerPilgrim() {
@@ -152,7 +151,7 @@ public class RegisterPilgrimController implements Initializable {
 				try {
 					exportarCarnet.exportarCarnet(pilgrim);
 					File carnetFile = new File("exports/pilgrims/carnet_" + pilgrim.getName() + ".xml");
-					ExistDBConnection.getInstance().storeCarnet(currentStop.getName(), carnetFile);
+					existDBService.storeCarnet(currentStop.getName(), carnetFile);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<carnet>
+   <id>5</id>
+   <fechaexp>2025-03-09</fechaexp>
+   <expedidoen>Oviedo</expedidoen>
+   <peregrino>
+      <nombre>pruebanuevo</nombre>
+      <nacionalidad>Emiratos Árabes Unidos</nacionalidad>
+   </peregrino>
+   <hoy>2025-03-09</hoy>
+   <distanciatotal>0,0</distanciatotal>
+   <paradas>
+      <parada>
+         <orden>1</orden>
+         <nombre>Oviedo</nombre>
+         <region>Esp</region>
+      </parada>
+   </paradas>
+   <estancias/>
+</carnet>

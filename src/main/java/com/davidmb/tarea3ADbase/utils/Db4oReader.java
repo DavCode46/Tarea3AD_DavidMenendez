@@ -2,19 +2,23 @@ package com.davidmb.tarea3ADbase.utils;
 
 import com.davidmb.tarea3ADbase.models.ContractedGroup;
 import com.davidmb.tarea3ADbase.models.Service;
-import com.db4o.Db4o;
+import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.config.EmbeddedConfiguration;
 
 public class Db4oReader {
 	  public static void main(String[] args) {
-	        ObjectContainer db = Db4o.openFile("db.db4o");
+		  // Recomendado en versiones más recientes de DB4O 
+		  EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
+	      ObjectContainer db = Db4oEmbedded.openFile(config, "db.db4o");
 	        
 	        try {
 	            System.out.println("Contenido de la base de datos:");
 	            ObjectSet<Object> servicesResult = db.queryByExample(Service.class);
 	            System.out.println("-".repeat(50));
-	            System.out.println("Servicios");
+	            System.out.println("------------------- Servicios --------------------");
+	            System.out.println("-".repeat(50));
 	            while (servicesResult.hasNext()) {
 	                System.out.println(servicesResult.next());
 	            }
@@ -22,7 +26,8 @@ public class Db4oReader {
 	            
 	            ObjectSet<Object> groupResult = db.queryByExample(ContractedGroup.class);
 	            System.out.println("-".repeat(50));
-	            System.out.println("Conjunto contratado");
+	            System.out.println("-------------- Conjunto contratado ---------------");
+	            System.out.println("-".repeat(50));
 	            while (groupResult.hasNext()) {
 	                System.out.println(groupResult.next());
 	            }

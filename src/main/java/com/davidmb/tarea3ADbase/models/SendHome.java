@@ -1,7 +1,6 @@
 package com.davidmb.tarea3ADbase.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
