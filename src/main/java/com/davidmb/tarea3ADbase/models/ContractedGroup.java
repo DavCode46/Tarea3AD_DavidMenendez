@@ -11,10 +11,10 @@ public class ContractedGroup {
 	String extra = null;
 	Long stayId;
 	List<Long> serviceIds = new ArrayList<>();
-	
+
 	public ContractedGroup() {
 	}
-	
+
 	public ContractedGroup(double totalPrice, char payMode, Long stayId, List<Long> serviceIds) {
 		this.totalPrice = totalPrice;
 		this.payMode = payMode;
@@ -53,11 +53,11 @@ public class ContractedGroup {
 	public void setExtra(String extra) {
 		this.extra = extra;
 	}
-	
+
 	public Long getStayId() {
 		return stayId;
 	}
-	
+
 	public void setStayId(Long stayId) {
 		this.stayId = stayId;
 	}
@@ -91,7 +91,16 @@ public class ContractedGroup {
 
 	@Override
 	public String toString() {
-		return "Grupo contratado: " + ", precio total: " + totalPrice + ", modo de pago: " + payMode;
+		String payModeStr = "";
+		switch (payMode) {
+			case 'E' -> payModeStr = "Efectivo";
+			case 'B' -> payModeStr = "Bizum";
+			case 'T' -> payModeStr = "Tarjeta";
+		}
+
+		return "Grupo contratado: " + "precio total: " + totalPrice + ", modo de pago: " + payModeStr
+                + (extra != null ? ", extra: " + extra : "") + ", id de estancia: " + stayId + ", ids de servicios: "
+                + serviceIds;
 	}
 
 }
