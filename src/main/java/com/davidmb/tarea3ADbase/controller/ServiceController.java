@@ -152,7 +152,7 @@ public class ServiceController implements Initializable {
 		}
 		double price = Double.parseDouble(priceText);
 		List<Long> stops = getSelectedStops();
-
+		
 		if (serviceBeingEdited != null) {
 			serviceBeingEdited.setServiceName(name);
 			
@@ -367,8 +367,15 @@ public class ServiceController implements Initializable {
 				        Stop stop = stopService.find(id);
 				        stops.add(stop);
 				    }
-				    selectedStopsList.setItems(stops); 
+				   
+				    selectedStopsList.setItems(stops);
+				    
+				    stopsTable.getSelectionModel().clearSelection();
+				    for (Stop stop : stops) {
+				        stopsTable.getSelectionModel().select(stop);
+				    }
 				}
+
 			};
 			return cell;
 		}

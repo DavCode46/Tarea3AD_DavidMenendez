@@ -110,6 +110,17 @@
 						<Button fx:id="saveStop" text="_Guardar"
 							styleClass="primary-button" onAction="#saveStop" />
 
+		
+					</children>
+				</HBox>
+				
+				
+				<HBox spacing="10.0" alignment="CENTER">
+					<children>
+					
+						<Button fx:id="backupCard" text="_Backup"
+							styleClass="primary-button" onAction="#backupCard" />
+
 						<Button fx:id="exportStopsBtn" text="Exportar paradas"
 							styleClass="primary-button" onAction="#exportStopDataReport" />
 					</children>

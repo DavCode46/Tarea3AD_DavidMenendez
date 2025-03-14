@@ -122,6 +122,11 @@
 		<VBox alignment="CENTER_RIGHT" prefHeight="571.0"
 			prefWidth="1300.0" maxWidth="1500.0" BorderPane.alignment="CENTER">
 			<children>
+			<Label text="Peregrinos" styleClass="form-title">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    </Label>
 				<TableView fx:id="pilgrimsTable" prefHeight="300.0"
 					prefWidth="679.0" maxWidth="1100.0" tableMenuButtonVisible="true">
 					<HBox.margin>
@@ -150,7 +155,11 @@
 						<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 					</columnResizePolicy>
 				</TableView>
-				
+				<Label text="Carnets" styleClass="form-title">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    </Label>
 				<TableView fx:id="carnetsTable" prefHeight="300.0"
 					prefWidth="1000.0" maxWidth="1100.0" tableMenuButtonVisible="true">
 					<HBox.margin>

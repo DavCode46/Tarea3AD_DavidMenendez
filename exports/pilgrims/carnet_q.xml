@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <carnet>
-   <id>4</id>
+   <id>5</id>
    <fechaexp>2025-03-14</fechaexp>
    <expedidoen>Siero</expedidoen>
    <peregrino>
-      <nombre>nuevo</nombre>
+      <nombre>q</nombre>
       <nacionalidad>Australia</nacionalidad>
    </peregrino>
    <hoy>2025-03-14</hoy>

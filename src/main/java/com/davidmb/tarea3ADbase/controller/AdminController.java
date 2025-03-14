@@ -24,6 +24,7 @@ import com.davidmb.tarea3ADbase.db.ExistDBConnection;
 import com.davidmb.tarea3ADbase.dtos.StayView;
 import com.davidmb.tarea3ADbase.models.Stop;
 import com.davidmb.tarea3ADbase.models.User;
+import com.davidmb.tarea3ADbase.services.BackupCarnetsService;
 import com.davidmb.tarea3ADbase.services.PilgrimService;
 import com.davidmb.tarea3ADbase.services.StopService;
 import com.davidmb.tarea3ADbase.services.UserService;
@@ -148,6 +149,8 @@ public class AdminController implements Initializable {
 	private UserService userService;
 	@Autowired
 	private PilgrimService pilgrimService;
+	@Autowired
+	private BackupCarnetsService backupCarnetsService;
 
 	@Autowired
 	Alerts alert;
@@ -179,6 +182,14 @@ public class AdminController implements Initializable {
 	@FXML
 	public void addService(ActionEvent event) {
 		stageManager.switchScene(FxmlView.SERVICES);
+	}
+	
+	@FXML
+	public void backupCard() {
+		if(backupCarnetsService.backupAllCarnets())
+			alert.info("Backup", "Backup", "Se ha realizado un backup de los carnets.");
+		else
+			alert.error("Backup", "Backup", new StringBuilder("Error al realizar el backup de los carnets."));
 	}
 
 	@FXML

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <carnet>
-   <id>4</id>
+   <id>1</id>
    <fechaexp>2025-03-14</fechaexp>
    <expedidoen>Siero</expedidoen>
    <peregrino>
-      <nombre>nuevo</nombre>
-      <nacionalidad>Australia</nacionalidad>
+      <nombre>u</nombre>
+      <nacionalidad>Emiratos Árabes Unidos</nacionalidad>
    </peregrino>
    <hoy>2025-03-14</hoy>
    <distanciatotal>0,0</distanciatotal>
