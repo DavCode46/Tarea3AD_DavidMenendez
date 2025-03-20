@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<carnet>
+   <id>7</id>
+   <fechaexp>2025-03-19</fechaexp>
+   <expedidoen>Siero</expedidoen>
+   <peregrino>
+      <nombre>david</nombre>
+      <nacionalidad>Australia</nacionalidad>
+   </peregrino>
+   <hoy>2025-03-19</hoy>
+   <distanciatotal>36,0</distanciatotal>
+   <paradas>
+      <parada>
+         <orden>1</orden>
+         <nombre>Siero</nombre>
+         <region>Esp</region>
+      </parada>
+      <parada>
+         <orden>2</orden>
+         <nombre>Ribadeo</nombre>
+         <region>Fra</region>
+      </parada>
+   </paradas>
+   <estancias>
+      <estancia>
+         <id>4</id>
+         <fecha>2025-03-19</fecha>
+         <parada>Ribadeo</parada>
+         <vip>Sí</vip>
+      </estancia>
+   </estancias>
+</carnet>

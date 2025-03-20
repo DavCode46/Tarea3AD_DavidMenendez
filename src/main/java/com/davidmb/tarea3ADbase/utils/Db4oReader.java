@@ -1,5 +1,7 @@
 package com.davidmb.tarea3ADbase.utils;
 
+import java.time.LocalDate;
+
 import com.davidmb.tarea3ADbase.models.ContractedGroup;
 import com.davidmb.tarea3ADbase.models.Service;
 import com.db4o.Db4oEmbedded;
@@ -12,7 +14,9 @@ public class Db4oReader {
 		  // Recomendado en versiones más recientes de DB4O 
 		  EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
 	      ObjectContainer db = Db4oEmbedded.openFile(config, "db.db4o");
-	        
+	      LocalDate fecha = LocalDate.now();
+	      LocalDate fecha2 = LocalDate.of(2025, 03, 19);
+	      System.out.println(fecha.compareTo(fecha2));
 	        try {
 	            System.out.println("Contenido de la base de datos:");
 	            ObjectSet<Object> servicesResult = db.queryByExample(Service.class);

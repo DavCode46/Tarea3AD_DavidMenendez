@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<carnet>
+   <id>8</id>
+   <fechaexp>2025-03-19</fechaexp>
+   <expedidoen>Ribadeo</expedidoen>
+   <peregrino>
+      <nombre>noel</nombre>
+      <nacionalidad>Japón</nacionalidad>
+   </peregrino>
+   <hoy>2025-03-19</hoy>
+   <distanciatotal>0,0</distanciatotal>
+   <paradas>
+      <parada>
+         <orden>1</orden>
+         <nombre>Ribadeo</nombre>
+         <region>Fra</region>
+      </parada>
+   </paradas>
+   <estancias/>
+</carnet>
